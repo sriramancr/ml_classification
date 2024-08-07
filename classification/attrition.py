@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-'''
-streamlit run D:/gitbuild/bosch/attrition.py
-'''
-
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -41,7 +37,6 @@ def dataset():
     st.session_state["predicted"] = False
     
     st.header("Dataset")
-    # file="D:/gitbuild/bosch/hr_emp.csv"
     file = "hr_emp.csv"
     
     data = pd.read_csv(file)
