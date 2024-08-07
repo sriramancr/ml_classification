@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import streamlit as st
-import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 from sklearn.metrics import classification_report as cr
-import os,time
+import time
 
 # ============
 # page design
@@ -16,26 +15,12 @@ st.set_page_config(layout='wide')
 if "hrdata" not in st.session_state:
     st.session_state["concdata"] = None
     
-if "predicted" not in st.session_state:
-    st.session_state["predicted"] = False
-
-if "predictions" not in st.session_state:
-    st.session_state["predictions"] = None
-    
-if "err" not in st.session_state:
-    st.session_state["err"] = -1
-
-if "model" not in st.session_state:
-    st.session_state["model"] = None
-
 def homepage():
     st.header("Demo : Classification")
     st.divider()
     st.subheader("Employee Attrition Prediction")
 
 def dataset():
-    st.session_state["predicted"] = False
-    
     st.header("Dataset")
     file = "hr_emp.csv"
     
@@ -65,18 +50,16 @@ def predictattr():
         churn.travel[churn.travel=='Travel_Rarely']='Rarely'
         churn.travel[churn.travel=='Travel_Frequently']='Frequently'
         churn.travel[churn.travel=='Non-Travel']='No'
-        churn.travel.unique()
-    
+            
         churn.department[churn.department=='Research & Development']='R&D'
         churn.department[churn.department=='Human Resources']='HR'
-        churn.department.unique()
-    
+        
         # make a copy of the dataset
         newchurn=churn.copy(deep=True)
     
         # convert columns to dummies
         for e in fact_x:
-            dummy=pd.get_dummies(churn[e],drop_first=True,prefix=e)
+            dummy = pd.get_dummies(churn[e],drop_first=True,prefix=e)
             newchurn = newchurn.join(dummy)
     
         newchurn.drop(columns=fact_x,inplace=True)
@@ -87,12 +70,12 @@ def predictattr():
         m1=sm.Logit(trainy,trainx).fit()
     
         # predictions
-        p1=m1.predict(testx)
+        p1 = m1.predict(testx)
     
         # convert probabilities to 0 and 1
         predY = p1.copy()
-        predY[predY < 0.3]=0
-        predY[predY >=0.3]=1
+        predY[predY < 0.3] = 0
+        predY[predY >=0.3] = 1
     
         res = pd.DataFrame({'actual':testy,'predicted':predY})
         time.sleep(2)
@@ -107,7 +90,6 @@ def predictattr():
         df_crep = pd.DataFrame(crep).T
         c2.write(df_crep)
 
-    
 
 # ==============================================
 # calling each function based on the click value
