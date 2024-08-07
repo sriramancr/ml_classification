@@ -10,10 +10,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 from sklearn.metrics import classification_report as cr
-import matplotlib.pyplot as plt
-import seaborn as sns
 import os,time
-
 
 # ============
 # page design
@@ -44,7 +41,8 @@ def dataset():
     st.session_state["predicted"] = False
     
     st.header("Dataset")
-    file="D:/gitbuild/bosch/hr_emp.csv"
+    # file="D:/gitbuild/bosch/hr_emp.csv"
+    file = "hr_emp.csv"
     
     data = pd.read_csv(file)
     data['attr']=0
@@ -116,13 +114,12 @@ def predictattr():
 
     
 
-
 # ==============================================
 # calling each function based on the click value
 # ==============================================
 # main menu settings
-options=[":house:",":memo:",":lower_left_fountain_pen:",":red_circle:"]
-captions=['Home','Dataset',"Attrition Prediction","Close Application"]
+options=[":house:",":memo:",":lower_left_fountain_pen:"] 
+captions=['Home','Dataset',"Attrition Prediction"]
 nav = st.sidebar.radio("Select Option",options,captions=captions)
 ndx = options.index(nav)
 
@@ -134,24 +131,3 @@ if (ndx==1):
     
 if (ndx==2):
     predictattr()
-    pass
-
-if (ndx==3):
-    st.header("Close Application")
-    st.divider()
-    st.subheader("Are you sure you want to terminate this session ?")
-    st.write("\n")
-    c1,c2 = st.columns(2)
-    btn_close = c1.button(":eject:",help="Close Application")
-    btn_cancel = c2.button(":black_right_pointing_triangle_with_double_vertical_bar:",help="Cancel")
-    
-    if btn_close:    
-        with (st.spinner("Closing application ...")):
-            time.sleep(2)
-                
-            import keyboard,psutil
-            
-            keyboard.press_and_release('ctrl+w')
-            pid = os.getpid()
-            p = psutil.Process(pid)
-            p.terminate()
