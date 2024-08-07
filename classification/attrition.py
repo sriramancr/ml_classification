@@ -3,7 +3,7 @@
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import statsmodels.api as sm
+from sklearn import linear_model
 from sklearn.metrics import classification_report as cr
 import time
 
@@ -67,17 +67,12 @@ def predictattr():
         trainx,testx,trainy,testy = train_test_split(newchurn.drop('attr',axis=1),newchurn['attr'],test_size=0.2)
     
         # build the model
-        m1=sm.Logit(trainy,trainx).fit()
+        m1 = linear_model.LogisticRegression().fit(trainx,trainy)
     
         # predictions
         p1 = m1.predict(testx)
-    
-        # convert probabilities to 0 and 1
-        predY = p1.copy()
-        predY[predY < 0.3] = 0
-        predY[predY >=0.3] = 1
-    
-        res = pd.DataFrame({'actual':testy,'predicted':predY})
+
+        res = pd.DataFrame({'actual':testy,'predicted':p1})
         time.sleep(2)
         
         c1,c2 = st.columns(2)
